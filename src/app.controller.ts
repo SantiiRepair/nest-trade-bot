@@ -7,7 +7,6 @@ export class AppController {
 
   @Get()
   Bot(): any {
-    console.log('✅  Bot Running...');
     return this.appService.Mandalor();
   }
 }

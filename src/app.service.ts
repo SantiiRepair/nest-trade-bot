@@ -9,17 +9,16 @@ export class Control {
     timeZone: 'America/Caracas',
   })
   async Mandalor(): Promise<any> {
-    try {
-      const now = Date.now();
-      const input = {
-        request: {
-          market: 'ETH_BTC',
-        },
-      };
+    try {      
       const inp = 'ETH';
-      const out = 'USDT';
+      const out = 'USDT';      
       const apiKey = 'FD4A1B2472B9FEAAAFF35EF57F643EAF';
       const secret = 'A84D3C998CBD538370C0DC4B1A8FB877';
+      const input = {
+        request: {
+          market: `${inp}_${out}`,
+        },
+      };
       const baseUrl = 'https://api.coinsbit.io';
       const payload = JSON.stringify(input, null, 0);
       const jsonPayload = Buffer.from(payload).toString('base64');
@@ -42,9 +41,9 @@ export class Control {
       );
       if (response.data.result[0].price > 0) {
         console.log(
-          `💰  ${inp} current price: ` + response.data.result[0].price,
+          ` 💰  ${inp} current price: ` + response.data.result[0].price,
         );
-        console.log(`🛒  Buying ${inp}...`);
+        console.log(` 🛒  Buying ${inp}...`);
       }
     } catch (err) {
       console.error(err);

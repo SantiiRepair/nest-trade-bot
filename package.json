@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "nest build",
+    "clean": "rm -rf dist",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -19,8 +20,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/axios": "^2.0.0",
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/schedule": "^2.2.0",
