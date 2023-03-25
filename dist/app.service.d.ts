@@ -1,18 +1,9 @@
 import { HttpService } from '@nestjs/axios';
-export interface BalanceA {
+export interface Balance {
     success: boolean;
     message: string;
     result: {
-        available: number;
-        freeze: number | null;
-    };
-    code: number;
-}
-export interface BalanceB {
-    success: boolean;
-    message: string;
-    result: {
-        available: number;
+        available: number | null;
         freeze: number | null;
     };
     code: number;
@@ -21,8 +12,19 @@ export interface Buy {
     success: boolean;
     message: string;
     result: {
-        available: number;
-        freeze: number | null;
+        orderId: string;
+        market: string;
+        price: string;
+        side: string;
+        type: string;
+        timestamp: number;
+        dealMoney: string;
+        dealStock: string;
+        amount: string;
+        takerFee: string;
+        makerFee: string;
+        left: string;
+        dealFee: string;
     };
     code: number;
 }

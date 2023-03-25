@@ -5,31 +5,33 @@ import { firstValueFrom } from 'rxjs';
 import * as crypto from 'crypto';
 import axios from 'axios';
 
-export interface BalanceA {
+export interface Balance {
   success: boolean;
   message: string;
   result: {
-    available: number;
+    available: number | null;
     freeze: number | null;
   };
   code: number;
 }
 
-export interface BalanceB {
-  success: boolean;
-  message: string;
-  result: {
-    available: number;
-    freeze: number | null;
-  };
-  code: number;
-}
 export interface Buy {
   success: boolean;
   message: string;
   result: {
-    available: number;
-    freeze: number | null;
+    orderId: string;
+    market: string;
+    price: string;
+    side: string;
+    type: string;
+    timestamp: number;
+    dealMoney: string;
+    dealStock: string;
+    amount: string;
+    takerFee: string;
+    makerFee: string;
+    left: string;
+    dealFee: string;
   };
   code: number;
 }
@@ -53,6 +55,7 @@ export class Control {
         request: '/api/v1/account/balance',
         nonce: now,
       };
+
       const balanceB = {
         callback_url: 'https://callback.url',
         success_url: 'https://google.com/',
@@ -61,9 +64,22 @@ export class Control {
         request: '/api/v1/account/balance',
         nonce: now,
       };
+
+      const buy = {
+        callback_url: 'https://callback.url',
+        success_url: 'https://google.com/',
+        error_url: 'https://google.com/',
+        market: 'ETH_USDT',
+        side: 'buy',
+        amount: '0.1',
+        price: '1800',
+        request: '/api/v1/order/new',
+        nonce: now,
+      };
+
       const baseUrl = 'https://api.coinsbit.io';
 
-      // Convert balance A to hex
+      // Convert balanceA to hex
       const payloadBalanceA = JSON.stringify(balanceA, null, 0);
       const jsonPayloadBalanceA =
         Buffer.from(payloadBalanceA).toString('base64');
@@ -72,7 +88,7 @@ export class Control {
         .update(jsonPayloadBalanceA)
         .digest('hex');
 
-      // Convert balance B to hex
+      // Convert balanceB to hex
       const payloadBalanceB = JSON.stringify(balanceB, null, 0);
       const jsonPayloadBalanceB =
         Buffer.from(payloadBalanceB).toString('base64');
@@ -80,6 +96,15 @@ export class Control {
         .createHmac('sha512', secret)
         .update(jsonPayloadBalanceB)
         .digest('hex');
+
+      // Convert buy to hex
+      const payloadBuy = JSON.stringify(buy, null, 0);
+      const jsonPayloadBuy = Buffer.from(payloadBuy).toString('base64');
+      const encryptedBuy = crypto
+        .createHmac('sha512', secret)
+        .update(jsonPayloadBuy)
+        .digest('hex');
+
       console.log(' ⏳  Checking...');
       const mkt = await axios.get(
         `${baseUrl}/api/v1/public/history?market=${inp}_${out}`,
@@ -89,7 +114,7 @@ export class Control {
       } else if (mkt.data.result[0].price > 0) {
         console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
         const blIn = await firstValueFrom(
-          this.http.post<BalanceA>(
+          this.http.post<Balance>(
             `${baseUrl}/api/v1/account/balance`,
             balanceA,
             {
@@ -102,16 +127,36 @@ export class Control {
             },
           ),
         );
-        console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
+        console.log(` ⚖️  Balance on ${inp}: ${blIn.data.result.available}`);
         console.log(` 🛒  Buying ${inp}...`);
-        const by = await axios.post(
-          `${baseUrl}/api/v1/order/new?market=${inp}_${inp}&side=buy&amount=10&price=${mkt.data.result[0].price}`,
+        const by = await firstValueFrom(
+          this.http.post<Buy>(`${baseUrl}/api/v1/order/new`, buy, {
+            headers: {
+              'Content-type': 'application/json',
+              'X-TXC-APIKEY': apiKey,
+              'X-TXC-PAYLOAD': jsonPayloadBuy,
+              'X-TXC-SIGNATURE': encryptedBuy,
+            },
+          }),
         );
-        console.log(by.data.result);
-        const blOut = await axios.post(
-          `${baseUrl}/api/v1/account/balance?currency=${inp}`,
+        console.log(by.data);
+        const blOut = await firstValueFrom(
+          this.http.post<Balance>(
+            `${baseUrl}/api/v1/account/balance`,
+            balanceB,
+            {
+              headers: {
+                'Content-type': 'application/json',
+                'X-TXC-APIKEY': apiKey,
+                'X-TXC-PAYLOAD': jsonPayloadBalanceB,
+                'X-TXC-SIGNATURE': encryptedBalanceB,
+              },
+            },
+          ),
         );
-        console.log(` ⚖️  Sucess, new ${inp} balance: ${blOut.data.result}`);
+        console.log(
+          ` ⚖️  Sucess, new ${out} balance: ${blOut.data.result.available}`,
+        );
       }
     } catch (err) {
       console.error(err.cause);

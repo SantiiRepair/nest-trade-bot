@@ -43,6 +43,17 @@ let Control = class Control {
                 request: '/api/v1/account/balance',
                 nonce: now,
             };
+            const buy = {
+                callback_url: 'https://callback.url',
+                success_url: 'https://google.com/',
+                error_url: 'https://google.com/',
+                market: 'ETH_USDT',
+                side: 'buy',
+                amount: '0.1',
+                price: '1800',
+                request: '/api/v1/order/new',
+                nonce: now,
+            };
             const baseUrl = 'https://api.coinsbit.io';
             const payloadBalanceA = JSON.stringify(balanceA, null, 0);
             const jsonPayloadBalanceA = Buffer.from(payloadBalanceA).toString('base64');
@@ -55,6 +66,12 @@ let Control = class Control {
             const encryptedBalanceB = crypto
                 .createHmac('sha512', secret)
                 .update(jsonPayloadBalanceB)
+                .digest('hex');
+            const payloadBuy = JSON.stringify(buy, null, 0);
+            const jsonPayloadBuy = Buffer.from(payloadBuy).toString('base64');
+            const encryptedBuy = crypto
+                .createHmac('sha512', secret)
+                .update(jsonPayloadBuy)
                 .digest('hex');
             console.log(' ⏳  Checking...');
             const mkt = await axios_2.default.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`);
@@ -71,12 +88,26 @@ let Control = class Control {
                         'X-TXC-SIGNATURE': encryptedBalanceA,
                     },
                 }));
-                console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}...`);
+                console.log(` ⚖️  Balance on ${inp}: ${blIn.data.result.available}`);
                 console.log(` 🛒  Buying ${inp}...`);
-                const by = await axios_2.default.post(`${baseUrl}/api/v1/order/new?market=${inp}_${inp}&side=buy&amount=10&price=${mkt.data.result[0].price}`);
-                console.log(by.data.result);
-                const blOut = await axios_2.default.post(`${baseUrl}/api/v1/account/balance?currency=${inp}`);
-                console.log(` ⚖️  Sucess, new ${inp} balance: ${blOut.data.result}`);
+                const by = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/order/new`, buy, {
+                    headers: {
+                        'Content-type': 'application/json',
+                        'X-TXC-APIKEY': apiKey,
+                        'X-TXC-PAYLOAD': jsonPayloadBuy,
+                        'X-TXC-SIGNATURE': encryptedBuy,
+                    },
+                }));
+                console.log(by.data);
+                const blOut = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/account/balance`, balanceB, {
+                    headers: {
+                        'Content-type': 'application/json',
+                        'X-TXC-APIKEY': apiKey,
+                        'X-TXC-PAYLOAD': jsonPayloadBalanceB,
+                        'X-TXC-SIGNATURE': encryptedBalanceB,
+                    },
+                }));
+                console.log(` ⚖️  Sucess, new ${out} balance: ${blOut.data.result.available}`);
             }
         }
         catch (err) {
