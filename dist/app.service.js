@@ -12,14 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Control = void 0;
 const common_1 = require("@nestjs/common");
 const schedule_1 = require("@nestjs/schedule");
-const axios_1 = require("@nestjs/axios");
-const rxjs_1 = require("rxjs");
 const crypto = require("crypto");
-const axios_2 = require("axios");
+const axios_1 = require("axios");
 let Control = class Control {
-    constructor(http) {
-        this.http = http;
-    }
     async Mandalor() {
         try {
             const now = Date.now();
@@ -35,25 +30,6 @@ let Control = class Control {
                 request: '/api/v1/account/balance',
                 nonce: now,
             };
-            const balanceB = {
-                callback_url: 'https://callback.url',
-                success_url: 'https://google.com/',
-                error_url: 'https://google.com/',
-                currency: `${inp}`,
-                request: '/api/v1/account/balance',
-                nonce: now,
-            };
-            const buy = {
-                callback_url: 'https://callback.url',
-                success_url: 'https://google.com/',
-                error_url: 'https://google.com/',
-                market: `${inp}_${out}`,
-                side: 'buy',
-                amount: '0.1',
-                price: '1',
-                request: '/api/v1/order/new',
-                nonce: now,
-            };
             const baseUrl = 'https://api.coinsbit.io';
             const payloadBalanceA = JSON.stringify(balanceA, null, 0);
             const jsonPayloadBalanceA = Buffer.from(payloadBalanceA).toString('base64');
@@ -61,33 +37,21 @@ let Control = class Control {
                 .createHmac('sha512', secret)
                 .update(jsonPayloadBalanceA)
                 .digest('hex');
-            const payloadBalanceB = JSON.stringify(balanceB, null, 0);
-            const jsonPayloadBalanceB = Buffer.from(payloadBalanceB).toString('base64');
-            const encryptedBalanceB = crypto
-                .createHmac('sha512', secret)
-                .update(jsonPayloadBalanceB)
-                .digest('hex');
-            const payloadBuy = JSON.stringify(buy, null, 0);
-            const jsonPayloadBuy = Buffer.from(payloadBuy).toString('base64');
-            const encryptedBuy = crypto
-                .createHmac('sha512', secret)
-                .update(jsonPayloadBuy)
-                .digest('hex');
             console.log(' ⏳  Checking...');
-            const mkt = await axios_2.default.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`);
+            const mkt = await axios_1.default.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`);
             if (mkt.data.result[0].price < 0) {
                 console.log(' ✗  Dont avaiable');
             }
             else if (mkt.data.result[0].price > 0) {
                 console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
-                const blIn = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/account/balance`, balanceA, {
+                const blIn = await axios_1.default.post(`${baseUrl}/api/v1/account/balance`, balanceA, {
                     headers: {
                         'Content-type': 'application/json',
                         'X-TXC-APIKEY': apiKey,
                         'X-TXC-PAYLOAD': jsonPayloadBalanceA,
                         'X-TXC-SIGNATURE': encryptedBalanceA,
                     },
-                }));
+                });
                 console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
             }
         }
@@ -103,8 +67,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], Control.prototype, "Mandalor", null);
 Control = __decorate([
-    (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [axios_1.HttpService])
+    (0, common_1.Injectable)()
 ], Control);
 exports.Control = Control;
 //# sourceMappingURL=app.service.js.map

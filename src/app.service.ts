@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import * as crypto from 'crypto';
 import axios from 'axios';
 
-export interface Balance {
+/*export interface Balance {
   success: boolean;
   message: string;
   result: {
@@ -34,11 +34,10 @@ export interface Buy {
     dealFee: string;
   };
   code: number;
-}
+}*/
 
 @Injectable()
 export class Control {
-  constructor(private readonly http: HttpService) {}
   @Interval(2000)
   async Mandalor(): Promise<any> {
     try {
@@ -56,7 +55,7 @@ export class Control {
         nonce: now,
       };
 
-      const balanceB = {
+      /*const balanceB = {
         callback_url: 'https://callback.url',
         success_url: 'https://google.com/',
         error_url: 'https://google.com/',
@@ -75,7 +74,7 @@ export class Control {
         price: '1',
         request: '/api/v1/order/new',
         nonce: now,
-      };
+      };*/
 
       const baseUrl = 'https://api.coinsbit.io';
 
@@ -89,7 +88,7 @@ export class Control {
         .digest('hex');
 
       // Convert balanceB to hex
-      const payloadBalanceB = JSON.stringify(balanceB, null, 0);
+      /* const payloadBalanceB = JSON.stringify(balanceB, null, 0);
       const jsonPayloadBalanceB =
         Buffer.from(payloadBalanceB).toString('base64');
       const encryptedBalanceB = crypto
@@ -103,7 +102,7 @@ export class Control {
       const encryptedBuy = crypto
         .createHmac('sha512', secret)
         .update(jsonPayloadBuy)
-        .digest('hex');
+        .digest('hex');*/
 
       console.log(' ⏳  Checking...');
       const mkt = await axios.get(
@@ -113,19 +112,17 @@ export class Control {
         console.log(' ✗  Dont avaiable');
       } else if (mkt.data.result[0].price > 0) {
         console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
-        const blIn = await firstValueFrom(
-          this.http.post<Balance>(
-            `${baseUrl}/api/v1/account/balance`,
-            balanceA,
-            {
-              headers: {
-                'Content-type': 'application/json',
-                'X-TXC-APIKEY': apiKey,
-                'X-TXC-PAYLOAD': jsonPayloadBalanceA,
-                'X-TXC-SIGNATURE': encryptedBalanceA,
-              },
+        const blIn = await axios.post(
+          `${baseUrl}/api/v1/account/balance`,
+          balanceA,
+          {
+            headers: {
+              'Content-type': 'application/json',
+              'X-TXC-APIKEY': apiKey,
+              'X-TXC-PAYLOAD': jsonPayloadBalanceA,
+              'X-TXC-SIGNATURE': encryptedBalanceA,
             },
-          ),
+          },
         );
         console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
         /*console.log(` 🛒  Buying ${inp}...`);
