@@ -69,7 +69,7 @@ export class Control {
         callback_url: 'https://callback.url',
         success_url: 'https://google.com/',
         error_url: 'https://google.com/',
-        market: `${out}_${inp}`,
+        market: `${inp}_${out}`,
         direction: 'buy',
         amount: '0.1',
         request: '/api/v1/order/new_market',
