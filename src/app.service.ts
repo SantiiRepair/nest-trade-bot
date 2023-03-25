@@ -72,7 +72,7 @@ export class Control {
         market: `${inp}_${out}`,
         side: 'buy',
         amount: '0.1',
-        price: '0.1',
+        price: '1',
         request: '/api/v1/order/new',
         nonce: now,
       };
