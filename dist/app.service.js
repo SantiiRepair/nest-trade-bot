@@ -80,6 +80,16 @@ let Control = class Control {
             }
             else if (mkt.data.result[0].price > 0) {
                 console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
+                const blIn = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/account/balance`, balanceA, {
+                    headers: {
+                        'Content-type': 'application/json',
+                        'X-TXC-APIKEY': apiKey,
+                        'X-TXC-PAYLOAD': jsonPayloadBalanceA,
+                        'X-TXC-SIGNATURE': encryptedBalanceA,
+                    },
+                }));
+                console.log(` ⚖️  Balance on ${inp}: ${blIn.data.result.available}`);
+                console.log(` 🛒  Buying ${inp}...`);
                 const by = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/order/new`, buy, {
                     headers: {
                         'Content-type': 'application/json',
@@ -89,6 +99,15 @@ let Control = class Control {
                     },
                 }));
                 console.log(by.data);
+                const blOut = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/account/balance`, balanceB, {
+                    headers: {
+                        'Content-type': 'application/json',
+                        'X-TXC-APIKEY': apiKey,
+                        'X-TXC-PAYLOAD': jsonPayloadBalanceB,
+                        'X-TXC-SIGNATURE': encryptedBalanceB,
+                    },
+                }));
+                console.log(` ⚖️  Success, new ${out} balance: ${blOut.data.result.available}`);
             }
         }
         catch (err) {

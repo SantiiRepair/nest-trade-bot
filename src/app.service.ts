@@ -113,7 +113,7 @@ export class Control {
         console.log(' ✗  Dont avaiable');
       } else if (mkt.data.result[0].price > 0) {
         console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
-        /*const blIn = await firstValueFrom(
+        const blIn = await firstValueFrom(
           this.http.post<Balance>(
             `${baseUrl}/api/v1/account/balance`,
             balanceA,
@@ -128,7 +128,7 @@ export class Control {
           ),
         );
         console.log(` ⚖️  Balance on ${inp}: ${blIn.data.result.available}`);
-        console.log(` 🛒  Buying ${inp}...`);*/
+        console.log(` 🛒  Buying ${inp}...`);
         const by = await firstValueFrom(
           this.http.post<Buy>(`${baseUrl}/api/v1/order/new`, buy, {
             headers: {
@@ -140,7 +140,7 @@ export class Control {
           }),
         );
         console.log(by.data);
-        /*const blOut = await firstValueFrom(
+        const blOut = await firstValueFrom(
           this.http.post<Balance>(
             `${baseUrl}/api/v1/account/balance`,
             balanceB,
@@ -156,7 +156,7 @@ export class Control {
         );
         console.log(
           ` ⚖️  Success, new ${out} balance: ${blOut.data.result.available}`,
-        );*/
+        );
       }
     } catch (err) {
       console.error(err);
