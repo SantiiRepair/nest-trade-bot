@@ -70,9 +70,10 @@ export class Control {
         success_url: 'https://google.com/',
         error_url: 'https://google.com/',
         market: `${inp}_${out}`,
-        direction: 'buy',
+        side: 'buy',
         amount: '0.1',
-        request: '/api/v1/order/new_market',
+        price: '0.1',
+        request: '/api/v1/order/new',
         nonce: now,
       };
 
@@ -127,9 +128,9 @@ export class Control {
           ),
         );
         console.log(` ⚖️  Balance on ${inp}: ${blIn.data.result.available}`);
-        console.log(` 🛒  Buying ${inp}...`);
+        console.log(` 🛒  Buying ${inp}...`);*/
         const by = await firstValueFrom(
-          this.http.post<Buy>(`${baseUrl}/api/v1/order/new_market`, buy, {
+          this.http.post<Buy>(`${baseUrl}/api/v1/order/new`, buy, {
             headers: {
               'Content-type': 'application/json',
               'X-TXC-APIKEY': apiKey,
@@ -138,8 +139,8 @@ export class Control {
             },
           }),
         );
-        console.log(by.data);*/
-        const blOut = await firstValueFrom(
+        console.log(by.data);
+        /*const blOut = await firstValueFrom(
           this.http.post<Balance>(
             `${baseUrl}/api/v1/account/balance`,
             balanceB,
@@ -155,7 +156,7 @@ export class Control {
         );
         console.log(
           ` ⚖️  Success, new ${out} balance: ${blOut.data.result.available}`,
-        );
+        );*/
       }
     } catch (err) {
       console.error(err);

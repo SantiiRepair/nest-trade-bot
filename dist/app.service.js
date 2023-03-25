@@ -48,9 +48,10 @@ let Control = class Control {
                 success_url: 'https://google.com/',
                 error_url: 'https://google.com/',
                 market: `${inp}_${out}`,
-                direction: 'buy',
+                side: 'buy',
                 amount: '0.1',
-                request: '/api/v1/order/new_market',
+                price: '0.1',
+                request: '/api/v1/order/new',
                 nonce: now,
             };
             const baseUrl = 'https://api.coinsbit.io';
@@ -79,15 +80,15 @@ let Control = class Control {
             }
             else if (mkt.data.result[0].price > 0) {
                 console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
-                const blOut = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/account/balance`, balanceB, {
+                const by = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/order/new`, buy, {
                     headers: {
                         'Content-type': 'application/json',
                         'X-TXC-APIKEY': apiKey,
-                        'X-TXC-PAYLOAD': jsonPayloadBalanceB,
-                        'X-TXC-SIGNATURE': encryptedBalanceB,
+                        'X-TXC-PAYLOAD': jsonPayloadBuy,
+                        'X-TXC-SIGNATURE': encryptedBuy,
                     },
                 }));
-                console.log(` ⚖️  Sucess, new ${out} balance: ${blOut.data.result.available}`);
+                console.log(by.data);
             }
         }
         catch (err) {
