@@ -41,10 +41,10 @@ let Control = class Control {
                     'X-TXC-SIGNATURE': encrypted,
                 },
             };
-            console.log(" •  Checking...");
+            console.log(' •  Checking...');
             const mkt = await axios_1.default.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`, config);
             if (mkt.data.result[0].price < 0) {
-                console.log(" ✗  Dont avaiable");
+                console.log(' ✗  Dont avaiable');
             }
             else if (mkt.data.result[0].price > 0) {
                 console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
