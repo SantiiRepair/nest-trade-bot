@@ -5,10 +5,8 @@ import axios from 'axios';
 
 @Injectable()
 export class Control {
-  @Cron('10 * * * * *', {
-    timeZone: 'America/Caracas',
-  })
-  async Mandalor(): Promise<any> {
+  @Cron('1 * * * * *')
+  async Mandalor(): Promise<any> {  
     try {      
       const inp = 'ETH';
       const out = 'USDT';      
@@ -34,19 +32,25 @@ export class Control {
           'X-TXC-SIGNATURE': encrypted,
         },
       };
-
-      const response = await axios.get(
+      console.log(" •  Checking...")
+      const mkt = await axios.get(
         `${baseUrl}/api/v1/public/history?market=${inp}_${out}`,
         config,
       );
-      if (response.data.result[0].price > 0) {
-        console.log(
-          ` 💰  ${inp} current price: ` + response.data.result[0].price,
-        );
-        console.log(` 🛒  Buying ${inp}...`);
-      }
+      if (mkt.data.result[0].price < 0) {
+         console.log(" ✗  Dont avaiable")
+      } else if(mkt.data.result[0].price > 0) {
+          console.log(
+          ` 💰  ${inp} current price: ` + mkt.data.result[0].price,
+         );
+         console.log(` 🛒  Buying ${inp}...`);
+         const by = await axios.get(
+         `${baseUrl}/api/v1/public/history?market=${inp}_${out}`,
+         config); 
+         console.log(by);
+      }      
     } catch (err) {
-      console.error(err);
+      console.error(err.cause);
     }
   }
 }

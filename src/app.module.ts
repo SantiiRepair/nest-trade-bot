@@ -6,6 +6,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [ScheduleModule.forRoot()],
 })
+
 @Module({
   imports: [],
   controllers: [AppController],

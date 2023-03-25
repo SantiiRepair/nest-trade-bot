@@ -41,21 +41,25 @@ let Control = class Control {
                     'X-TXC-SIGNATURE': encrypted,
                 },
             };
-            const response = await axios_1.default.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`, config);
-            if (response.data.result[0].price > 0) {
-                console.log(` 💰  ${inp} current price: ` + response.data.result[0].price);
+            console.log(" •  Checking...");
+            const mkt = await axios_1.default.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`, config);
+            if (mkt.data.result[0].price < 0) {
+                console.log(" ✗  Dont avaiable");
+            }
+            else if (mkt.data.result[0].price > 0) {
+                console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
                 console.log(` 🛒  Buying ${inp}...`);
+                const by = await axios_1.default.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`, config);
+                console.log(by);
             }
         }
         catch (err) {
-            console.error(err);
+            console.error(err.cause);
         }
     }
 };
 __decorate([
-    (0, schedule_1.Cron)('10 * * * * *', {
-        timeZone: 'America/Caracas',
-    }),
+    (0, schedule_1.Cron)('1 * * * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
