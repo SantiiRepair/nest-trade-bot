@@ -39,7 +39,7 @@ let Control = class Control {
                 callback_url: 'https://callback.url',
                 success_url: 'https://google.com/',
                 error_url: 'https://google.com/',
-                currency: `${inp}`,
+                currency: `${out}`,
                 request: '/api/v1/account/balance',
                 nonce: now,
             };

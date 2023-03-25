@@ -38,7 +38,7 @@ export interface Buy {
 
 @Injectable()
 export class Control {
-  constructor(private http: HttpService) {}
+  constructor(private readonly http: HttpService) {}
   @Interval(20000)
   async Mandalor(): Promise<any> {
     try {
@@ -60,7 +60,7 @@ export class Control {
         callback_url: 'https://callback.url',
         success_url: 'https://google.com/',
         error_url: 'https://google.com/',
-        currency: `${inp}`,
+        currency: `${out}`,
         request: '/api/v1/account/balance',
         nonce: now,
       };

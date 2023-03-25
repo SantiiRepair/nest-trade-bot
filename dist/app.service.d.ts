@@ -29,7 +29,7 @@ export interface Buy {
     code: number;
 }
 export declare class Control {
-    private http;
+    private readonly http;
     constructor(http: HttpService);
     Mandalor(): Promise<any>;
 }

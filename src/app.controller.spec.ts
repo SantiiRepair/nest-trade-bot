@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Control } from './app.service';
 
 describe('AppController', () => {
   let app: TestingModule;
@@ -8,14 +8,14 @@ describe('AppController', () => {
   beforeAll(async () => {
     app = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
+      providers: [Control],
     }).compile();
   });
 
   describe('getHello', () => {
     it('should return "Hello World!"', () => {
       const appController = app.get(AppController);
-      expect(appController.getHello()).toBe('Hello World!');
+      expect(appController.Bot()).toBe('Hello World!');
     });
   });
 });
