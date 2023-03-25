@@ -39,7 +39,7 @@ export interface Buy {
 @Injectable()
 export class Control {
   constructor(private readonly http: HttpService) {}
-  @Interval(20000)
+  @Interval(2000)
   async Mandalor(): Promise<any> {
     try {
       const now = Date.now();

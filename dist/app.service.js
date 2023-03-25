@@ -88,7 +88,7 @@ let Control = class Control {
                         'X-TXC-SIGNATURE': encryptedBalanceA,
                     },
                 }));
-                console.log(` ⚖️  Balance on ${inp}: ${blIn.data.result.available}`);
+                console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
             }
         }
         catch (err) {
