@@ -23,8 +23,8 @@ let Control = class Control {
     async Mandalor() {
         try {
             const now = Date.now();
-            const inp = 'ETH';
-            const out = 'USDT';
+            const inp = 'USDT';
+            const out = 'ETH';
             const apiKey = 'FD4A1B2472B9FEAAAFF35EF57F643EAF';
             const secret = 'A84D3C998CBD538370C0DC4B1A8FB877';
             const balanceA = {
@@ -89,25 +89,6 @@ let Control = class Control {
                     },
                 }));
                 console.log(` ⚖️  Balance on ${inp}: ${blIn.data.result.available}`);
-                console.log(` 🛒  Buying ${inp}...`);
-                const by = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/order/new`, buy, {
-                    headers: {
-                        'Content-type': 'application/json',
-                        'X-TXC-APIKEY': apiKey,
-                        'X-TXC-PAYLOAD': jsonPayloadBuy,
-                        'X-TXC-SIGNATURE': encryptedBuy,
-                    },
-                }));
-                console.log(by.data);
-                const blOut = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/account/balance`, balanceB, {
-                    headers: {
-                        'Content-type': 'application/json',
-                        'X-TXC-APIKEY': apiKey,
-                        'X-TXC-PAYLOAD': jsonPayloadBalanceB,
-                        'X-TXC-SIGNATURE': encryptedBalanceB,
-                    },
-                }));
-                console.log(` ⚖️  Success, new ${out} balance: ${blOut.data.result.available}`);
             }
         }
         catch (err) {

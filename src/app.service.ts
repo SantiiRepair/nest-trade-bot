@@ -43,8 +43,8 @@ export class Control {
   async Mandalor(): Promise<any> {
     try {
       const now = Date.now();
-      const inp = 'ETH';
-      const out = 'USDT';
+      const inp = 'USDT';
+      const out = 'ETH';
       const apiKey = 'FD4A1B2472B9FEAAAFF35EF57F643EAF';
       const secret = 'A84D3C998CBD538370C0DC4B1A8FB877';
       const balanceA = {
@@ -128,7 +128,7 @@ export class Control {
           ),
         );
         console.log(` ⚖️  Balance on ${inp}: ${blIn.data.result.available}`);
-        console.log(` 🛒  Buying ${inp}...`);
+        /*console.log(` 🛒  Buying ${inp}...`);
         const by = await firstValueFrom(
           this.http.post<Buy>(`${baseUrl}/api/v1/order/new`, buy, {
             headers: {
@@ -156,7 +156,7 @@ export class Control {
         );
         console.log(
           ` ⚖️  Success, new ${out} balance: ${blOut.data.result.available}`,
-        );
+        );*/
       }
     } catch (err) {
       console.error(err);
