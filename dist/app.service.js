@@ -48,8 +48,11 @@ let Control = class Control {
             }
             else if (mkt.data.result[0].price > 0) {
                 console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
+                const bl = await axios_1.default.post(`${baseUrl}/api/v1/account/balance?currency=${out}`, config);
+                console.log(` 🛒  Balance on ${out}...`);
                 console.log(` 🛒  Buying ${inp}...`);
-                const by = await axios_1.default.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`, config);
+                const by = await axios_1.default.post(`${baseUrl}/api/v1/order/new?market=${inp}_${inp}&side=buy&amount=10&price=${mkt.data.result[0].price}`, config);
+                console.log(` Sucess, new ${inp} balance`);
             }
         }
         catch (err) {
@@ -58,7 +61,7 @@ let Control = class Control {
     }
 };
 __decorate([
-    (0, schedule_1.Cron)('* * * * * *'),
+    (0, schedule_1.Interval)(2000),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
