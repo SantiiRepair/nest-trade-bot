@@ -97,7 +97,7 @@ let Control = class Control {
     }
 };
 __decorate([
-    (0, schedule_1.Interval)(20000),
+    (0, schedule_1.Interval)(2000),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
