@@ -39,10 +39,12 @@ export class Control {
       } else if(mkt.data.result[0].price > 0) {
          console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
          const bl = await axios.post(`${baseUrl}/api/v1/account/balance?currency=${out}`, config); 
-         console.log(` 🛒  Balance on ${out}...`);         
+         // console.log(` 🛒  Balance on ${out}...`); 
+         console.log(bl.data)        
          console.log(` 🛒  Buying ${inp}...`);
          const by = await axios.post(`${baseUrl}/api/v1/order/new?market=${inp}_${inp}&side=buy&amount=10&price=${mkt.data.result[0].price}`, config); 
-         console.log(` Sucess, new ${inp} balance`);
+         // console.log(` Sucess, new ${inp} balance`);
+         console.log(by.data)
        }
     } catch (err) {
       console.error(err.cause);
