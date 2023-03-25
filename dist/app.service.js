@@ -23,15 +23,15 @@ let Control = class Control {
     async Mandalor() {
         try {
             const now = Date.now();
-            const inp = 'USDT';
-            const out = 'ETH';
+            const inp = 'ETH';
+            const out = 'USDT';
             const apiKey = 'FD4A1B2472B9FEAAAFF35EF57F643EAF';
             const secret = 'A84D3C998CBD538370C0DC4B1A8FB877';
             const balanceA = {
                 callback_url: 'https://callback.url',
                 success_url: 'https://google.com/',
                 error_url: 'https://google.com/',
-                currency: `${inp}`,
+                currency: `${out}`,
                 request: '/api/v1/account/balance',
                 nonce: now,
             };
@@ -39,7 +39,7 @@ let Control = class Control {
                 callback_url: 'https://callback.url',
                 success_url: 'https://google.com/',
                 error_url: 'https://google.com/',
-                currency: `${out}`,
+                currency: `${inp}`,
                 request: '/api/v1/account/balance',
                 nonce: now,
             };
