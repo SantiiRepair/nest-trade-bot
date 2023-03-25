@@ -85,24 +85,6 @@ let Control = class Control {
                 });
                 console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
                 console.log(` 🛒  Buying ${inp}...`);
-                const by = await axios_1.default.post(`${baseUrl}/api/v1/order/new`, buy, {
-                    headers: {
-                        'Content-type': 'application/json',
-                        'X-TXC-APIKEY': apiKey,
-                        'X-TXC-PAYLOAD': jsonPayloadBuy,
-                        'X-TXC-SIGNATURE': encryptedBuy,
-                    },
-                });
-                console.log(by.data);
-                const blOut = await axios_1.default.post(`${baseUrl}/api/v1/account/balance`, balanceB, {
-                    headers: {
-                        'Content-type': 'application/json',
-                        'X-TXC-APIKEY': apiKey,
-                        'X-TXC-PAYLOAD': jsonPayloadBalanceB,
-                        'X-TXC-SIGNATURE': encryptedBalanceB,
-                    },
-                });
-                console.log(` ⚖️  Success, new ${out} balance: ${blOut.data.result.available}`);
             }
         }
         catch (err) {
