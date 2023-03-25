@@ -2,7 +2,7 @@
   "name": "nest-trade-bot",
   "private": true,
   "version": "1.0.0",
-  "description": "Nest TypeScript starter repository",
+  "description": "Nest bot made to buy tokens on an recent launch",
   "license": "MIT",
   "scripts": {
     "build": "nest build",
