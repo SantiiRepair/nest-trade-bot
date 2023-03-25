@@ -37,14 +37,12 @@ export class Control {
       if (mkt.data.result[0].price < 0) {
          console.log(" ✗  Dont avaiable")
       } else if(mkt.data.result[0].price > 0) {
-          console.log(
-          ` 💰  ${inp} current price: ` + mkt.data.result[0].price,
-         );
+         console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
+         const bl = await axios.post(`${baseUrl}/api/v1/account/balance?currency=${inp}`, config); 
+         console.log(` 🛒  Balance of ${inp}...`);         
          console.log(` 🛒  Buying ${inp}...`);
-         const by = await axios.get(
-         `${baseUrl}/api/v1/public/history?market=${inp}_${out}`,
-         config); 
-         // console.log(by.data);
+         const by = await axios.post(`${baseUrl}/api/v1/order/new?market=${out}_${inp}&side=buy&amount=10&price=${mkt.data.result[0].price}`, config); 
+         console.log(` Sucess, new ${inp} balance`);
        }
     } catch (err) {
       console.error(err.cause);
