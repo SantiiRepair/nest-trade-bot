@@ -154,7 +154,7 @@ export class Control {
           ),
         );
         console.log(
-          ` ⚖️  Sucess, new ${out} balance: ${blOut.data.result.available}`,
+          ` ⚖️  Success, new ${out} balance: ${blOut.data.result.available}`,
         );
       }
     } catch (err) {
