@@ -53,7 +53,7 @@ export class Control {
         nonce: now,
       };
 
-      /*const balanceB = {
+      const balanceB = {
         callback_url: 'https://callback.url',
         success_url: 'https://google.com/',
         error_url: 'https://google.com/',
@@ -72,7 +72,7 @@ export class Control {
         price: '1',
         request: '/api/v1/order/new',
         nonce: now,
-      };*/
+      };
 
       const baseUrl = 'https://api.coinsbit.io';
 
@@ -86,7 +86,7 @@ export class Control {
         .digest('hex');
 
       // Convert balanceB to hex
-      /* const payloadBalanceB = JSON.stringify(balanceB, null, 0);
+      const payloadBalanceB = JSON.stringify(balanceB, null, 0);
       const jsonPayloadBalanceB =
         Buffer.from(payloadBalanceB).toString('base64');
       const encryptedBalanceB = crypto
@@ -100,7 +100,7 @@ export class Control {
       const encryptedBuy = crypto
         .createHmac('sha512', secret)
         .update(jsonPayloadBuy)
-        .digest('hex');*/
+        .digest('hex');
 
       console.log(' ⏳  Checking...');
       const mkt = await axios.get(
@@ -123,35 +123,31 @@ export class Control {
           },
         );
         console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
-        /*console.log(` 🛒  Buying ${inp}...`);
-        const by = await firstValueFrom(
-          this.http.post<Buy>(`${baseUrl}/api/v1/order/new`, buy, {
+        console.log(` 🛒  Buying ${inp}...`);
+        const by = await axios.post(`${baseUrl}/api/v1/order/new`, buy, {
+          headers: {
+            'Content-type': 'application/json',
+            'X-TXC-APIKEY': apiKey,
+            'X-TXC-PAYLOAD': jsonPayloadBuy,
+            'X-TXC-SIGNATURE': encryptedBuy,
+          },
+        });
+        console.log(by.data);
+        const blOut = await axios.post(
+          `${baseUrl}/api/v1/account/balance`,
+          balanceB,
+          {
             headers: {
               'Content-type': 'application/json',
               'X-TXC-APIKEY': apiKey,
-              'X-TXC-PAYLOAD': jsonPayloadBuy,
-              'X-TXC-SIGNATURE': encryptedBuy,
+              'X-TXC-PAYLOAD': jsonPayloadBalanceB,
+              'X-TXC-SIGNATURE': encryptedBalanceB,
             },
-          }),
-        );
-        console.log(by.data);
-        const blOut = await firstValueFrom(
-          this.http.post<Balance>(
-            `${baseUrl}/api/v1/account/balance`,
-            balanceB,
-            {
-              headers: {
-                'Content-type': 'application/json',
-                'X-TXC-APIKEY': apiKey,
-                'X-TXC-PAYLOAD': jsonPayloadBalanceB,
-                'X-TXC-SIGNATURE': encryptedBalanceB,
-              },
-            },
-          ),
+          },
         );
         console.log(
           ` ⚖️  Success, new ${out} balance: ${blOut.data.result.available}`,
-        );*/
+        );
       }
     } catch (err) {
       console.error(err);
