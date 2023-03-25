@@ -5,7 +5,7 @@ import axios from 'axios';
 
 @Injectable()
 export class Control {
-  @Cron('1 * * * * *')
+  @Cron('* * * * * *')
   async Mandalor(): Promise<any> {  
     try {      
       const inp = 'ETH';
@@ -32,11 +32,8 @@ export class Control {
           'X-TXC-SIGNATURE': encrypted,
         },
       };
-      console.log(" •  Checking...")
-      const mkt = await axios.get(
-        `${baseUrl}/api/v1/public/history?market=${inp}_${out}`,
-        config,
-      );
+      console.log(" •  Checking...")     
+      const mkt = await axios.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`, config);
       if (mkt.data.result[0].price < 0) {
          console.log(" ✗  Dont avaiable")
       } else if(mkt.data.result[0].price > 0) {
@@ -47,8 +44,8 @@ export class Control {
          const by = await axios.get(
          `${baseUrl}/api/v1/public/history?market=${inp}_${out}`,
          config); 
-         console.log(by);
-      }      
+         // console.log(by.data);
+       }
     } catch (err) {
       console.error(err.cause);
     }

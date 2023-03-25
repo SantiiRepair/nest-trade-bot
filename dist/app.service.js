@@ -50,7 +50,6 @@ let Control = class Control {
                 console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
                 console.log(` 🛒  Buying ${inp}...`);
                 const by = await axios_1.default.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`, config);
-                console.log(by);
             }
         }
         catch (err) {
@@ -59,7 +58,7 @@ let Control = class Control {
     }
 };
 __decorate([
-    (0, schedule_1.Cron)('1 * * * * *'),
+    (0, schedule_1.Cron)('* * * * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
