@@ -20,6 +20,8 @@ let Control = class Control {
             const now = Date.now();
             const inp = 'ETH';
             const out = 'USDT';
+            const amount = '1';
+            const price = '1';
             const apiKey = 'FD4A1B2472B9FEAAAFF35EF57F643EAF';
             const secret = 'A84D3C998CBD538370C0DC4B1A8FB877';
             const balanceA = {
@@ -36,7 +38,7 @@ let Control = class Control {
                 error_url: 'https://google.com/',
                 currency: `${inp}`,
                 request: '/api/v1/account/balance',
-                nonce: now,
+                nonce: now + 400,
             };
             const buy = {
                 callback_url: 'https://callback.url',
@@ -44,10 +46,10 @@ let Control = class Control {
                 error_url: 'https://google.com/',
                 market: `${inp}_${out}`,
                 side: 'buy',
-                amount: '0.1',
-                price: '1',
+                amount: `${amount}`,
+                price: `${price}`,
                 request: '/api/v1/order/new',
-                nonce: now,
+                nonce: now + 200,
             };
             const baseUrl = 'https://api.coinsbit.io';
             const payloadBalanceA = JSON.stringify(balanceA, null, 0);
@@ -85,6 +87,24 @@ let Control = class Control {
                 });
                 console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
                 console.log(` 🛒  Buying ${inp}...`);
+                const by = await axios_1.default.post(`${baseUrl}/api/v1/order/new`, buy, {
+                    headers: {
+                        'Content-type': 'application/json',
+                        'X-TXC-APIKEY': apiKey,
+                        'X-TXC-PAYLOAD': jsonPayloadBuy,
+                        'X-TXC-SIGNATURE': encryptedBuy,
+                    },
+                });
+                console.log(by.data);
+                const blOut = await axios_1.default.post(`${baseUrl}/api/v1/account/balance`, balanceB, {
+                    headers: {
+                        'Content-type': 'application/json',
+                        'X-TXC-APIKEY': apiKey,
+                        'X-TXC-PAYLOAD': jsonPayloadBalanceB,
+                        'X-TXC-SIGNATURE': encryptedBalanceB,
+                    },
+                });
+                console.log(` ⚖️  Success, new ${out} balance: ${blOut.data.result.available}`);
             }
         }
         catch (err) {
@@ -93,7 +113,7 @@ let Control = class Control {
     }
 };
 __decorate([
-    (0, schedule_1.Interval)(2000),
+    (0, schedule_1.Interval)(20000),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

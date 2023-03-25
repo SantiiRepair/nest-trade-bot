@@ -3,45 +3,16 @@ import { Interval } from '@nestjs/schedule';
 import * as crypto from 'crypto';
 import axios from 'axios';
 
-/*export interface Balance {
-  success: boolean;
-  message: string;
-  result: {
-    available: number | null;
-    freeze: number | null;
-  };
-  code: number;
-}
-
-export interface Buy {
-  success: boolean;
-  message: string;
-  result: {
-    orderId: string;
-    market: string;
-    price: string;
-    side: string;
-    type: string;
-    timestamp: number;
-    dealMoney: string;
-    dealStock: string;
-    amount: string;
-    takerFee: string;
-    makerFee: string;
-    left: string;
-    dealFee: string;
-  };
-  code: number;
-}*/
-
 @Injectable()
 export class Control {
-  @Interval(2000)
+  @Interval(20000)
   async Mandalor(): Promise<any> {
     try {
       const now = Date.now();
       const inp = 'ETH';
       const out = 'USDT';
+      const amount = '1';
+      const price = '1';
       const apiKey = 'FD4A1B2472B9FEAAAFF35EF57F643EAF';
       const secret = 'A84D3C998CBD538370C0DC4B1A8FB877';
       const balanceA = {
@@ -59,7 +30,7 @@ export class Control {
         error_url: 'https://google.com/',
         currency: `${inp}`,
         request: '/api/v1/account/balance',
-        nonce: now,
+        nonce: now + 400,
       };
 
       const buy = {
@@ -68,10 +39,10 @@ export class Control {
         error_url: 'https://google.com/',
         market: `${inp}_${out}`,
         side: 'buy',
-        amount: '0.1',
-        price: '1',
+        amount: `${amount}`,
+        price: `${price}`,
         request: '/api/v1/order/new',
-        nonce: now,
+        nonce: now + 200,
       };
 
       const baseUrl = 'https://api.coinsbit.io';
@@ -124,7 +95,7 @@ export class Control {
         );
         console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
         console.log(` 🛒  Buying ${inp}...`);
-        /*const by = await axios.post(`${baseUrl}/api/v1/order/new`, buy, {
+        const by = await axios.post(`${baseUrl}/api/v1/order/new`, buy, {
           headers: {
             'Content-type': 'application/json',
             'X-TXC-APIKEY': apiKey,
@@ -147,7 +118,7 @@ export class Control {
         );
         console.log(
           ` ⚖️  Success, new ${out} balance: ${blOut.data.result.available}`,
-        );*/
+        );
       }
     } catch (err) {
       console.error(err);
