@@ -60,7 +60,7 @@ export class Control {
         callback_url: 'https://callback.url',
         success_url: 'https://google.com/',
         error_url: 'https://google.com/',
-        currency: `${out}`,
+        currency: `${inp}`,
         request: '/api/v1/account/balance',
         nonce: now,
       };
@@ -69,11 +69,10 @@ export class Control {
         callback_url: 'https://callback.url',
         success_url: 'https://google.com/',
         error_url: 'https://google.com/',
-        market: `${inp}_${out}`,
-        side: 'buy',
+        market: `${out}_${inp}`,
+        direction: 'buy',
         amount: '0.1',
-        price: '1800',
-        request: '/api/v1/order/new',
+        request: '/api/v1/order/new_market',
         nonce: now,
       };
 
@@ -113,7 +112,7 @@ export class Control {
         console.log(' ✗  Dont avaiable');
       } else if (mkt.data.result[0].price > 0) {
         console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
-        const blIn = await firstValueFrom(
+        /*const blIn = await firstValueFrom(
           this.http.post<Balance>(
             `${baseUrl}/api/v1/account/balance`,
             balanceA,
@@ -128,9 +127,9 @@ export class Control {
           ),
         );
         console.log(` ⚖️  Balance on ${inp}: ${blIn.data.result.available}`);
-        console.log(` 🛒  Buying ${inp}...`);
+        console.log(` 🛒  Buying ${inp}...`);*/
         const by = await firstValueFrom(
-          this.http.post<Buy>(`${baseUrl}/api/v1/order/new`, buy, {
+          this.http.post<Buy>(`${baseUrl}/api/v1/order/new_market`, buy, {
             headers: {
               'Content-type': 'application/json',
               'X-TXC-APIKEY': apiKey,
@@ -140,7 +139,7 @@ export class Control {
           }),
         );
         console.log(by.data);
-        const blOut = await firstValueFrom(
+        /*const blOut = await firstValueFrom(
           this.http.post<Balance>(
             `${baseUrl}/api/v1/account/balance`,
             balanceB,
@@ -156,10 +155,10 @@ export class Control {
         );
         console.log(
           ` ⚖️  Sucess, new ${out} balance: ${blOut.data.result.available}`,
-        );
+        );*/
       }
     } catch (err) {
-      console.error(err.cause);
+      console.error(err);
     }
   }
 }

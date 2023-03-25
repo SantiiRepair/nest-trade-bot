@@ -39,7 +39,7 @@ let Control = class Control {
                 callback_url: 'https://callback.url',
                 success_url: 'https://google.com/',
                 error_url: 'https://google.com/',
-                currency: `${out}`,
+                currency: `${inp}`,
                 request: '/api/v1/account/balance',
                 nonce: now,
             };
@@ -47,11 +47,10 @@ let Control = class Control {
                 callback_url: 'https://callback.url',
                 success_url: 'https://google.com/',
                 error_url: 'https://google.com/',
-                market: `${inp}_${out}`,
-                side: 'buy',
+                market: `${out}_${inp}`,
+                direction: 'buy',
                 amount: '0.1',
-                price: '1800',
-                request: '/api/v1/order/new',
+                request: '/api/v1/order/new_market',
                 nonce: now,
             };
             const baseUrl = 'https://api.coinsbit.io';
@@ -80,17 +79,7 @@ let Control = class Control {
             }
             else if (mkt.data.result[0].price > 0) {
                 console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
-                const blIn = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/account/balance`, balanceA, {
-                    headers: {
-                        'Content-type': 'application/json',
-                        'X-TXC-APIKEY': apiKey,
-                        'X-TXC-PAYLOAD': jsonPayloadBalanceA,
-                        'X-TXC-SIGNATURE': encryptedBalanceA,
-                    },
-                }));
-                console.log(` ⚖️  Balance on ${inp}: ${blIn.data.result.available}`);
-                console.log(` 🛒  Buying ${inp}...`);
-                const by = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/order/new`, buy, {
+                const by = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/order/new_market`, buy, {
                     headers: {
                         'Content-type': 'application/json',
                         'X-TXC-APIKEY': apiKey,
@@ -99,19 +88,10 @@ let Control = class Control {
                     },
                 }));
                 console.log(by.data);
-                const blOut = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/account/balance`, balanceB, {
-                    headers: {
-                        'Content-type': 'application/json',
-                        'X-TXC-APIKEY': apiKey,
-                        'X-TXC-PAYLOAD': jsonPayloadBalanceB,
-                        'X-TXC-SIGNATURE': encryptedBalanceB,
-                    },
-                }));
-                console.log(` ⚖️  Sucess, new ${out} balance: ${blOut.data.result.available}`);
             }
         }
         catch (err) {
-            console.error(err.cause);
+            console.error(err);
         }
     }
 };
