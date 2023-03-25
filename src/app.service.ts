@@ -127,7 +127,7 @@ export class Control {
           ),
         );
         console.log(` ⚖️  Balance on ${inp}: ${blIn.data.result.available}`);
-        console.log(` 🛒  Buying ${inp}...`);*/
+        console.log(` 🛒  Buying ${inp}...`);
         const by = await firstValueFrom(
           this.http.post<Buy>(`${baseUrl}/api/v1/order/new_market`, buy, {
             headers: {
@@ -138,8 +138,8 @@ export class Control {
             },
           }),
         );
-        console.log(by.data);
-        /*const blOut = await firstValueFrom(
+        console.log(by.data);*/
+        const blOut = await firstValueFrom(
           this.http.post<Balance>(
             `${baseUrl}/api/v1/account/balance`,
             balanceB,
@@ -155,7 +155,7 @@ export class Control {
         );
         console.log(
           ` ⚖️  Sucess, new ${out} balance: ${blOut.data.result.available}`,
-        );*/
+        );
       }
     } catch (err) {
       console.error(err);

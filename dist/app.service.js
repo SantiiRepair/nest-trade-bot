@@ -79,15 +79,15 @@ let Control = class Control {
             }
             else if (mkt.data.result[0].price > 0) {
                 console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
-                const by = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/order/new_market`, buy, {
+                const blOut = await (0, rxjs_1.firstValueFrom)(this.http.post(`${baseUrl}/api/v1/account/balance`, balanceB, {
                     headers: {
                         'Content-type': 'application/json',
                         'X-TXC-APIKEY': apiKey,
-                        'X-TXC-PAYLOAD': jsonPayloadBuy,
-                        'X-TXC-SIGNATURE': encryptedBuy,
+                        'X-TXC-PAYLOAD': jsonPayloadBalanceB,
+                        'X-TXC-SIGNATURE': encryptedBalanceB,
                     },
                 }));
-                console.log(by.data);
+                console.log(` ⚖️  Sucess, new ${out} balance: ${blOut.data.result.available}`);
             }
         }
         catch (err) {
