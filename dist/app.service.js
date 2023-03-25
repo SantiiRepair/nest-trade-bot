@@ -47,7 +47,7 @@ let Control = class Control {
                 callback_url: 'https://callback.url',
                 success_url: 'https://google.com/',
                 error_url: 'https://google.com/',
-                market: 'ETH_USDT',
+                market: `${inp}_${out}`,
                 side: 'buy',
                 amount: '0.1',
                 price: '1800',
