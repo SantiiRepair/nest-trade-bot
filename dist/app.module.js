@@ -11,9 +11,14 @@ const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const schedule_1 = require("@nestjs/schedule");
+const axios_1 = require("@nestjs/axios");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
+    (0, common_1.Module)({
+        imports: [axios_1.HttpModule],
+        providers: [app_service_1.Control],
+    }),
     (0, common_1.Module)({
         imports: [schedule_1.ScheduleModule.forRoot()],
     }),
