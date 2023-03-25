@@ -124,7 +124,7 @@ export class Control {
         );
         console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
         console.log(` 🛒  Buying ${inp}...`);
-        const by = await axios.post(`${baseUrl}/api/v1/order/new`, buy, {
+        /*const by = await axios.post(`${baseUrl}/api/v1/order/new`, buy, {
           headers: {
             'Content-type': 'application/json',
             'X-TXC-APIKEY': apiKey,
@@ -147,7 +147,7 @@ export class Control {
         );
         console.log(
           ` ⚖️  Success, new ${out} balance: ${blOut.data.result.available}`,
-        );
+        );*/
       }
     } catch (err) {
       console.error(err);
