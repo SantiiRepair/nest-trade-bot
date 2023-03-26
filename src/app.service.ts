@@ -11,8 +11,6 @@ export class Control {
       const now = Date.now();
       const inp = 'ETH';
       const out = 'USDT';
-      const amount = '1';
-      const price = '1';
       const apiKey = 'FD4A1B2472B9FEAAAFF35EF57F643EAF';
       const secret = 'A84D3C998CBD538370C0DC4B1A8FB877';
       const balanceA = {
@@ -33,18 +31,6 @@ export class Control {
         nonce: now + 400,
       };
 
-      const buy = {
-        callback_url: 'https://callback.url',
-        success_url: 'https://google.com/',
-        error_url: 'https://google.com/',
-        market: `${inp}_${out}`,
-        side: 'buy',
-        amount: `${amount}`,
-        price: `${price}`,
-        request: '/api/v1/order/new',
-        nonce: now + 200,
-      };
-
       const baseUrl = 'https://api.coinsbit.io';
 
       // Convert balanceA to hex
@@ -63,14 +49,6 @@ export class Control {
       const encryptedBalanceB = crypto
         .createHmac('sha512', secret)
         .update(jsonPayloadBalanceB)
-        .digest('hex');
-
-      // Convert buy to hex
-      const payloadBuy = JSON.stringify(buy, null, 0);
-      const jsonPayloadBuy = Buffer.from(payloadBuy).toString('base64');
-      const encryptedBuy = crypto
-        .createHmac('sha512', secret)
-        .update(jsonPayloadBuy)
         .digest('hex');
 
       console.log(' ⏳  Checking...');
@@ -94,6 +72,26 @@ export class Control {
           },
         );
         console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
+        const slip = blIn.data.result.available / mkt.data.result[0].price;
+        const buy = {
+          callback_url: 'https://callback.url',
+          success_url: 'https://google.com/',
+          error_url: 'https://google.com/',
+          market: `${inp}_${out}`,
+          side: 'buy',
+          amount: `${slip}`,
+          price: `${mkt.data.result[0].price}`,
+          request: '/api/v1/order/new',
+          nonce: now + 200,
+        };
+
+        // Convert buy to hex
+        const payloadBuy = JSON.stringify(buy, null, 0);
+        const jsonPayloadBuy = Buffer.from(payloadBuy).toString('base64');
+        const encryptedBuy = crypto
+          .createHmac('sha512', secret)
+          .update(jsonPayloadBuy)
+          .digest('hex');
         console.log(` 🛒  Buying ${inp}...`);
         const by = await axios.post(`${baseUrl}/api/v1/order/new`, buy, {
           headers: {
@@ -104,7 +102,7 @@ export class Control {
           },
         });
         console.log(' ❗  Message: ' + by.data.message);
-        if (by.data.code == 200) {
+        if (by.data.code == true) {
           const blOut = await axios.post(
             `${baseUrl}/api/v1/account/balance`,
             balanceB,

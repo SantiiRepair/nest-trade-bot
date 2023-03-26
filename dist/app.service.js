@@ -40,17 +40,6 @@ let Control = class Control {
                 request: '/api/v1/account/balance',
                 nonce: now + 400,
             };
-            const buy = {
-                callback_url: 'https://callback.url',
-                success_url: 'https://google.com/',
-                error_url: 'https://google.com/',
-                market: `${inp}_${out}`,
-                side: 'buy',
-                amount: `${amount}`,
-                price: `${price}`,
-                request: '/api/v1/order/new',
-                nonce: now + 200,
-            };
             const baseUrl = 'https://api.coinsbit.io';
             const payloadBalanceA = JSON.stringify(balanceA, null, 0);
             const jsonPayloadBalanceA = Buffer.from(payloadBalanceA).toString('base64');
@@ -63,12 +52,6 @@ let Control = class Control {
             const encryptedBalanceB = crypto
                 .createHmac('sha512', secret)
                 .update(jsonPayloadBalanceB)
-                .digest('hex');
-            const payloadBuy = JSON.stringify(buy, null, 0);
-            const jsonPayloadBuy = Buffer.from(payloadBuy).toString('base64');
-            const encryptedBuy = crypto
-                .createHmac('sha512', secret)
-                .update(jsonPayloadBuy)
                 .digest('hex');
             console.log(' ⏳  Checking...');
             const mkt = await axios_1.default.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`);
@@ -86,6 +69,24 @@ let Control = class Control {
                     },
                 });
                 console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
+                const slip = blIn.data.result.available / mkt.data.result[0].price;
+                const buy = {
+                    callback_url: 'https://callback.url',
+                    success_url: 'https://google.com/',
+                    error_url: 'https://google.com/',
+                    market: `${inp}_${out}`,
+                    side: 'buy',
+                    amount: `${slip}`,
+                    price: `${mkt.data.result[0].price}`,
+                    request: '/api/v1/order/new',
+                    nonce: now + 200,
+                };
+                const payloadBuy = JSON.stringify(buy, null, 0);
+                const jsonPayloadBuy = Buffer.from(payloadBuy).toString('base64');
+                const encryptedBuy = crypto
+                    .createHmac('sha512', secret)
+                    .update(jsonPayloadBuy)
+                    .digest('hex');
                 console.log(` 🛒  Buying ${inp}...`);
                 const by = await axios_1.default.post(`${baseUrl}/api/v1/order/new`, buy, {
                     headers: {
@@ -96,7 +97,7 @@ let Control = class Control {
                     },
                 });
                 console.log(' ❗  Message: ' + by.data.message);
-                if (by.data.code == 200) {
+                if (by.data.code == true) {
                     const blOut = await axios_1.default.post(`${baseUrl}/api/v1/account/balance`, balanceB, {
                         headers: {
                             'Content-type': 'application/json',
