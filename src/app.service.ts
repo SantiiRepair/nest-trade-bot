@@ -103,25 +103,27 @@ export class Control {
             'X-TXC-SIGNATURE': encryptedBuy,
           },
         });
-        console.log(by.data);
-        const blOut = await axios.post(
-          `${baseUrl}/api/v1/account/balance`,
-          balanceB,
-          {
-            headers: {
-              'Content-type': 'application/json',
-              'X-TXC-APIKEY': apiKey,
-              'X-TXC-PAYLOAD': jsonPayloadBalanceB,
-              'X-TXC-SIGNATURE': encryptedBalanceB,
+        console.log(' ❗  Message: ' + by.data.message);
+        if (by.data.code == 200) {
+          const blOut = await axios.post(
+            `${baseUrl}/api/v1/account/balance`,
+            balanceB,
+            {
+              headers: {
+                'Content-type': 'application/json',
+                'X-TXC-APIKEY': apiKey,
+                'X-TXC-PAYLOAD': jsonPayloadBalanceB,
+                'X-TXC-SIGNATURE': encryptedBalanceB,
+              },
             },
-          },
-        );
-        console.log(
-          ` ⚖️  Success, new ${out} balance: ${blOut.data.result.available}`,
-        );
+          );
+          console.log(
+            ` ⚖️  Success, new ${inp} balance: ${blOut.data.result.available}`,
+          );
+        }
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.data);
     }
   }
 }
