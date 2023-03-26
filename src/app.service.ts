@@ -5,7 +5,7 @@ import axios from 'axios';
 
 @Injectable()
 export class Control {
-  @Interval(20000)
+  @Interval(2000)
   async Mandalor(): Promise<any> {
     try {
       const now = Date.now();
