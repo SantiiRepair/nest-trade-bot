@@ -77,9 +77,9 @@ export class Control {
       const mkt = await axios.get(
         `${baseUrl}/api/v1/public/history?market=${inp}_${out}`,
       );
-      if (mkt.data.result[0].price < 0) {
-        console.log(' ✗  Dont avaiable');
-      } else if (mkt.data.result[0].price > 0) {
+      if (mkt.data.result == false) {
+        console.log(' ✗  Dont available');
+      } else if (mkt.data.result !== false) {
         console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
         const blIn = await axios.post(
           `${baseUrl}/api/v1/account/balance`,
@@ -123,7 +123,7 @@ export class Control {
         }
       }
     } catch (err) {
-      console.error(err.data);
+      console.error(err);
     }
   }
 }

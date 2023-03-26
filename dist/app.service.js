@@ -72,10 +72,10 @@ let Control = class Control {
                 .digest('hex');
             console.log(' ⏳  Checking...');
             const mkt = await axios_1.default.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`);
-            if (mkt.data.result[0].price < 0) {
-                console.log(' ✗  Dont avaiable');
+            if (mkt.data.result == false) {
+                console.log(' ✗  Dont available');
             }
-            else if (mkt.data.result[0].price > 0) {
+            else if (mkt.data.result !== false) {
                 console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
                 const blIn = await axios_1.default.post(`${baseUrl}/api/v1/account/balance`, balanceA, {
                     headers: {
@@ -110,7 +110,7 @@ let Control = class Control {
             }
         }
         catch (err) {
-            console.error(err.data);
+            console.error(err);
         }
     }
 };
