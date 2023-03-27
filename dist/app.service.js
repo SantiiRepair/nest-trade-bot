@@ -18,9 +18,9 @@ let Control = class Control {
     async Mandalor() {
         try {
             const now = Date.now();
-            const inp = 'ETH';
+            const inp = 'BUSD';
             const out = 'USDT';
-            const max = 1500;
+            const max = 1;
             const apiKey = 'FD4A1B2472B9FEAAAFF35EF57F643EAF';
             const secret = 'A84D3C998CBD538370C0DC4B1A8FB877';
             const balanceA = {
@@ -55,7 +55,9 @@ let Control = class Control {
             console.log(' ⏳  Checking...');
             const mkt = await axios_1.default.get(`${baseUrl}/api/v1/public/history?market=${inp}_${out}`);
             if (mkt.data.result == false || mkt.data.result[0].price >= max) {
-                mkt.data.result[0].price >= max ? console.log(' ✗  Price very hight') : console.log(' ✗  Dont available');
+                mkt.data.result[0].price >= max
+                    ? console.log(' ✗  Price very hight')
+                    : console.log(' ✗  Dont available');
             }
             else if (mkt.data.result !== false && mkt.data.result[0].price < max) {
                 console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
@@ -68,17 +70,17 @@ let Control = class Control {
                     },
                 });
                 console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
-                const slip = blIn.data.result.available / mkt.data.result[0].price;
+                const amount = blIn.data.result.available / mkt.data.result[0].price;
                 const buy = {
                     callback_url: 'https://callback.url',
                     success_url: 'https://google.com/',
                     error_url: 'https://google.com/',
+                    request: '/api/v1/order/new',
                     market: `${inp}_${out}`,
                     side: 'buy',
-                    amount: `${slip}`,
-                    price: `${mkt.data.result[0].price}`,
-                    request: '/api/v1/order/new',
-                    nonce: now + 200,
+                    amount: '5',
+                    price: '0.1',
+                    nonce: now + 250,
                 };
                 const payloadBuy = JSON.stringify(buy, null, 0);
                 const jsonPayloadBuy = Buffer.from(payloadBuy).toString('base64');
