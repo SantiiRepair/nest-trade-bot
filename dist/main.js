@@ -6,7 +6,7 @@ async function bootstrap() {
     console.log(' 🤖  Initializing...');
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     await app.listen(3000);
-    console.log(' ✓  Bot Running...');
+    console.log(' ✔️  Bot Running...');
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

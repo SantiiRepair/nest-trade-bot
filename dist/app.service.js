@@ -20,6 +20,7 @@ let Control = class Control {
             const now = Date.now();
             const inp = 'BUSD';
             const out = 'USDT';
+            const brew = 0.2;
             const max = 1;
             const apiKey = 'FD4A1B2472B9FEAAAFF35EF57F643EAF';
             const secret = 'A84D3C998CBD538370C0DC4B1A8FB877';
@@ -71,7 +72,8 @@ let Control = class Control {
                 });
                 console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
                 const amount = blIn.data.result.available / mkt.data.result[0].price;
-                const price = mkt.data.result[0].price + 0.2;
+                const slip = parseFloat(mkt.data.result[0].price) + brew;
+                const price = slip.toString();
                 const buy = {
                     callback_url: 'https://callback.url',
                     success_url: 'https://google.com/',
@@ -79,9 +81,9 @@ let Control = class Control {
                     request: '/api/v1/order/new',
                     market: `${inp}_${out}`,
                     side: 'buy',
-                    amount: '2',
-                    price: '1',
-                    nonce: now + 250,
+                    amount: amount,
+                    price: price,
+                    nonce: now + 200,
                 };
                 const payloadBuy = JSON.stringify(buy, null, 0);
                 const jsonPayloadBuy = Buffer.from(payloadBuy).toString('base64');
@@ -98,7 +100,9 @@ let Control = class Control {
                         'X-TXC-SIGNATURE': encryptedBuy,
                     },
                 });
-                console.log(' ❗  Message: ' + by.data.message);
+                typeof by.data.result.orderId == 'number'
+                    ? console.log(' ✔️  Message: ' + by.data.result.orderId)
+                    : console.log(' ❗  Message: ' + by.data.message);
                 if (by.data.code == true) {
                     const blOut = await axios_1.default.post(`${baseUrl}/api/v1/account/balance`, balanceB, {
                         headers: {
