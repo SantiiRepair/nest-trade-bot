@@ -56,9 +56,9 @@ export class Control {
       const mkt = await axios.get(
         `${baseUrl}/api/v1/public/history?market=${inp}_${out}`,
       );
-      if (mkt.data.result == false) {
-        console.log(' ✗  Dont available');
-      } else if (mkt.data.result !== false &&  max <= mkt.data.result[0].price) {
+      if (mkt.data.result == false || mkt.data.result[0].price >= max) { 
+        mkt.data.result[0].price >= max ? console.log(' ✗  Price very hight') : console.log(' ✗  Dont available');
+      } else if (mkt.data.result !== false &&  mkt.data.result[0].price < max) {
         console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
         const blIn = await axios.post(
           `${baseUrl}/api/v1/account/balance`,
