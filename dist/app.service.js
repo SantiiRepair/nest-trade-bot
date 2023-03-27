@@ -20,6 +20,7 @@ let Control = class Control {
             const now = Date.now();
             const inp = 'ETH';
             const out = 'USDT';
+            const max = '200';
             const apiKey = 'FD4A1B2472B9FEAAAFF35EF57F643EAF';
             const secret = 'A84D3C998CBD538370C0DC4B1A8FB877';
             const balanceA = {
@@ -56,7 +57,7 @@ let Control = class Control {
             if (mkt.data.result == false) {
                 console.log(' ✗  Dont available');
             }
-            else if (mkt.data.result !== false) {
+            else if (mkt.data.result !== false && mkt.data.result[0].price >= max) {
                 console.log(` 💰  ${inp} current price: ` + mkt.data.result[0].price);
                 const blIn = await axios_1.default.post(`${baseUrl}/api/v1/account/balance`, balanceA, {
                     headers: {
