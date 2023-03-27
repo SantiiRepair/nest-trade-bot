@@ -12,7 +12,6 @@ export class Control {
       const inp = 'BUSD';
       const out = 'USDT';
       const max = 1;
-      const price = '0.1';
       const apiKey = 'FD4A1B2472B9FEAAAFF35EF57F643EAF';
       const secret = 'A84D3C998CBD538370C0DC4B1A8FB877';
       const balanceA = {
@@ -77,15 +76,16 @@ export class Control {
         );
         console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
         const amount = blIn.data.result.available / mkt.data.result[0].price;
+        const price = mkt.data.result[0].price + 0.2;
         const buy = {
           callback_url: 'https://callback.url',
           success_url: 'https://google.com/',
-          error_url: 'https://google.com/',          
+          error_url: 'https://google.com/',
           request: '/api/v1/order/new',
           market: `${inp}_${out}`,
           side: 'buy',
-          amount: `${amount}`, // or 'number'
-          price: `${price}`,
+          amount: '2', // or 'number'
+          price: '1',
           nonce: now + 250,
         };
 

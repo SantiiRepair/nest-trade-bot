@@ -71,6 +71,7 @@ let Control = class Control {
                 });
                 console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
                 const amount = blIn.data.result.available / mkt.data.result[0].price;
+                const price = mkt.data.result[0].price + 0.2;
                 const buy = {
                     callback_url: 'https://callback.url',
                     success_url: 'https://google.com/',
@@ -78,8 +79,8 @@ let Control = class Control {
                     request: '/api/v1/order/new',
                     market: `${inp}_${out}`,
                     side: 'buy',
-                    amount: '5',
-                    price: '0.1',
+                    amount: '2',
+                    price: '1',
                     nonce: now + 250,
                 };
                 const payloadBuy = JSON.stringify(buy, null, 0);
