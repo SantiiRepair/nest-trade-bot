@@ -71,7 +71,8 @@ let Control = class Control {
                     },
                 });
                 console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
-                const amount = await blIn.data.result.available / mkt.data.result[0].price;
+                const dodle = blIn.data.result.available / mkt.data.result[0].price;
+                const amount = Math.floor(dodle);
                 const slip = parseFloat(mkt.data.result[0].price) + brew;
                 const price = slip.toString();
                 const buy = {
@@ -103,7 +104,7 @@ let Control = class Control {
                 typeof by.data.result.orderId == 'number'
                     ? console.log(' ✔️  Message: ' + by.data.result.orderId)
                     : console.log(' ❗  Message: ' + by.data.message);
-                if (by.data.code == true) {
+                if (typeof by.data.result.orderId == 'number') {
                     const blOut = await axios_1.default.post(`${baseUrl}/api/v1/account/balance`, balanceB, {
                         headers: {
                             'Content-type': 'application/json',

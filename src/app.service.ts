@@ -77,7 +77,7 @@ export class Control {
         );
         console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
         const dodle = blIn.data.result.available / mkt.data.result[0].price;
-        const amount = dodle.parseInt();
+        const amount = Math.floor(dodle);
         const slip = parseFloat(mkt.data.result[0].price) + brew;
         const price = slip.toString();
         const buy = {
