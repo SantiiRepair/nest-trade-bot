@@ -71,8 +71,10 @@ let Control = class Control {
                     },
                 });
                 console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
-                const dodle = blIn.data.result.available / mkt.data.result[0].price - 5;
-                const amount = Math.floor(dodle);
+                const dodle = Math.floor(blIn.data.result.available) /
+                    parseFloat(mkt.data.result[0].price);
+                const sub = dodle - 5;
+                const amount = Math.floor(sub);
                 const slip = parseFloat(mkt.data.result[0].price) + brew;
                 const price = slip.toString();
                 const buy = {
