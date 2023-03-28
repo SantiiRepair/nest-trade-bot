@@ -12,7 +12,7 @@ export class Control {
       const inp = 'BUSD';
       const out = 'USDT';
       const brew = 0.2;
-      const max = 1;
+      const max = 1.3;
       const apiKey = 'FD4A1B2472B9FEAAAFF35EF57F643EAF';
       const secret = 'A84D3C998CBD538370C0DC4B1A8FB877';
       const balanceA = {
@@ -76,7 +76,8 @@ export class Control {
           },
         );
         console.log(` ⚖️  Balance on ${out}: ${blIn.data.result.available}`);
-        const amount = blIn.data.result.available / mkt.data.result[0].price;
+        const dodle = blIn.data.result.available / mkt.data.result[0].price;
+        const amount = dodle.parseInt();
         const slip = parseFloat(mkt.data.result[0].price) + brew;
         const price = slip.toString();
         const buy = {
