@@ -111,7 +111,7 @@ export class Control {
         typeof by.data.result.orderId == 'number'
           ? console.log(' ✔️  Message: ' + by.data.result.orderId)
           : console.log(' ❗  Message: ' + by.data.message);
-        if (by.data.code == true) {
+        if (typeof by.data.result.orderId == 'number') {
           const blOut = await axios.post(
             `${baseUrl}/api/v1/account/balance`,
             balanceB,
